@@ -55,27 +55,51 @@ export function registerAnalyticsTools(
 
         const result = await metaClient.getInsights(object_id, params);
 
-        const insights = result.data.map((insight) => ({
-          date_start: insight.date_start,
-          date_stop: insight.date_stop,
-          impressions: insight.impressions,
-          clicks: insight.clicks,
-          spend: insight.spend,
-          reach: insight.reach,
-          frequency: insight.frequency,
-          ctr: insight.ctr,
-          cpc: insight.cpc,
-          cpm: insight.cpm,
-          cpp: insight.cpp,
-          actions: insight.actions,
-          cost_per_action_type: insight.cost_per_action_type,
-          video_views: insight.video_views,
-          video_view_time: insight.video_view_time,
-          account_id: insight.account_id,
-          campaign_id: insight.campaign_id,
-          adset_id: insight.adset_id,
-          ad_id: insight.ad_id,
-        }));
+        const BREAKDOWN_FIELDS = [
+          "age",
+          "gender",
+          "placement",
+          "device_platform",
+          "publisher_platform",
+          "platform_position",
+          "impression_device",
+          "region",
+          "country",
+          "dma",
+          "product_id",
+          "hourly_stats_aggregated_by_advertiser_time_zone",
+          "hourly_stats_aggregated_by_audience_time_zone",
+        ];
+
+        const insights = result.data.map((row) => {
+          const insight: Record<string, any> = {
+            date_start: row.date_start,
+            date_stop: row.date_stop,
+            impressions: row.impressions,
+            clicks: row.clicks,
+            spend: row.spend,
+            reach: row.reach,
+            frequency: row.frequency,
+            ctr: row.ctr,
+            cpc: row.cpc,
+            cpm: row.cpm,
+            cpp: row.cpp,
+            actions: row.actions,
+            cost_per_action_type: row.cost_per_action_type,
+            video_views: row.video_views,
+            video_view_time: row.video_view_time,
+            account_id: row.account_id,
+            campaign_id: row.campaign_id,
+            adset_id: row.adset_id,
+            ad_id: row.ad_id,
+          };
+          for (const field of BREAKDOWN_FIELDS) {
+            if ((row as any)[field] !== undefined) {
+              insight[field] = (row as any)[field];
+            }
+          }
+          return insight;
+        });
 
         // Calculate summary statistics
         const summary = calculateSummaryMetrics(insights);
