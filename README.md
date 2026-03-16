@@ -15,7 +15,7 @@ Cuando se consultan métricas con breakdown por edad y género, el paquete origi
 ### 1. Clonar el repo
 
 ```bash
-git clone https://github.com/abruzzini/choiz-meta-ads-mcp.git
+git clone https://github.com/Choizapp/choiz-meta-ads-mcp.git
 cd choiz-meta-ads-mcp
 ```
 
