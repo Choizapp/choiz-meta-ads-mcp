@@ -166,7 +166,11 @@ async function main() {
     });
 
     // Add server health check tool
-    server.tool("health_check", {}, async () => {
+    server.tool(
+      "health_check",
+      "Verify the Meta Ads MCP server is running and can reach the Meta Marketing API. Returns server status, version, API connectivity, and a sanity check by listing accessible ad accounts. Use to troubleshoot connection or credential issues.",
+      {},
+      async () => {
       try {
         const accounts = await metaClient.getAdAccounts();
         const response = {
@@ -219,7 +223,11 @@ async function main() {
     });
 
     // Add server capabilities info
-    server.tool("get_capabilities", {}, async () => {
+    server.tool(
+      "get_capabilities",
+      "List the Meta Ads MCP server capabilities, supported Meta Marketing API version, features (campaign management, analytics, audiences, creatives), and the tools it exposes. Use to discover what operations are available.",
+      {},
+      async () => {
       const capabilities = {
         server_info: {
           name: "Meta Marketing API Server",

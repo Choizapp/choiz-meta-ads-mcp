@@ -21,6 +21,7 @@ export function registerAudienceTools(
   // List Audiences Tool
   server.tool(
     "list_audiences",
+    "List all custom and lookalike audiences in a Meta ad account. Returns audience id, name, type, estimated size, and delivery status. Use to see what targeting audiences exist before building campaigns or creating lookalikes.",
     ListAudiencesSchema.shape,
     async ({ account_id, type, limit, after }) => {
       try {
@@ -91,6 +92,7 @@ export function registerAudienceTools(
   // Create Custom Audience Tool
   server.tool(
     "create_custom_audience",
+    "Create a new custom audience in a Meta ad account from a data source (customer list, website visitors via pixel, app users, or engagement events). Returns the new audience id ready for campaign targeting.",
     CreateCustomAudienceSchema.shape,
     async ({
       account_id,
@@ -164,6 +166,7 @@ export function registerAudienceTools(
   // Create Lookalike Audience Tool
   server.tool(
     "create_lookalike_audience",
+    "Create a lookalike audience modeled on a source audience (custom audience, pixel event, or page engagement). Specify source audience, country, and similarity ratio (e.g. 1-10% match). Returns the new lookalike audience id for prospecting.",
     CreateLookalikeAudienceSchema.shape,
     async ({
       account_id,
@@ -248,6 +251,7 @@ export function registerAudienceTools(
   // Estimate Audience Size Tool
   server.tool(
     "estimate_audience_size",
+    "Estimate the reachable audience size on Meta given targeting parameters (location, age, gender, interests, behaviors, custom audiences). Returns lower/upper bound estimates. Use before launching campaigns to size the addressable audience and avoid over- or under-targeting.",
     EstimateAudienceSizeSchema.shape,
     async ({ account_id, targeting, optimization_goal }) => {
       try {
@@ -313,6 +317,7 @@ export function registerAudienceTools(
   // Update Audience Tool (for custom audiences)
   server.tool(
     "update_custom_audience",
+    "Update an existing custom audience's name, description, or source rules. Audience type cannot be changed. Returns the updated audience summary.",
     CreateCustomAudienceSchema.shape,
     async ({ name, description, retention_days }) => {
       try {
@@ -360,7 +365,11 @@ export function registerAudienceTools(
   );
 
   // Delete Audience Tool
-  server.tool("delete_audience", ListAudiencesSchema.shape, async () => {
+  server.tool(
+    "delete_audience",
+    "Delete a custom or lookalike audience from a Meta ad account. Requires audience_id. This is permanent and will impact any campaigns currently targeting the audience.",
+    ListAudiencesSchema.shape,
+    async () => {
     try {
       // Note: This would require an audience_id parameter in a real implementation
       const response = {
@@ -398,6 +407,7 @@ export function registerAudienceTools(
   // Get Audience Insights Tool
   server.tool(
     "get_audience_insights",
+    "Get demographic and interest breakdowns for a Meta audience — age, gender, location, top interests, behaviors, and device usage. Useful for understanding who is in an audience before targeting them.",
     EstimateAudienceSizeSchema.shape,
     async ({ targeting }) => {
       try {

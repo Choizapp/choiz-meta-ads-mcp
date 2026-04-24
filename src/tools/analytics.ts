@@ -21,6 +21,7 @@ export function registerAnalyticsTools(
   // Get Insights Tool
   server.tool(
     "get_insights",
+    "Retrieve Meta Ads performance insights (metrics like impressions, clicks, spend, CTR, CPC, CPM, conversions) for a campaign, ad set, or ad. Specify the object_id, level (campaign/adset/ad), date range via date_preset or time_range, and optional fields and breakdowns. Core analytics tool.",
     GetInsightsSchema.shape,
     async ({
       object_id,
@@ -151,6 +152,7 @@ export function registerAnalyticsTools(
   // Compare Performance Tool
   server.tool(
     "compare_performance",
+    "Compare performance metrics across multiple Meta Ads objects (campaigns, ad sets, or ads). Pass a list of object_ids at the same level, a date range, and the metrics to compare. Returns side-by-side analytics useful for A/B style evaluation and benchmarking.",
     ComparePerformanceSchema.shape,
     async ({ object_ids, level, date_preset, time_range, metrics }) => {
       try {
@@ -248,6 +250,7 @@ export function registerAnalyticsTools(
   // Export Insights Tool
   server.tool(
     "export_insights",
+    "Export Meta Ads performance insights in a downloadable format (CSV or JSON). Same filters as get_insights but returns exportable data suitable for offline analysis, reporting, or loading into spreadsheets and BI tools.",
     ExportInsightsSchema.shape,
     async ({
       object_id,
@@ -338,6 +341,7 @@ export function registerAnalyticsTools(
   // Get Campaign Performance Tool (simplified version of get_insights)
   server.tool(
     "get_campaign_performance",
+    "Get a high-level performance summary for a Meta Ads campaign. Automatically pulls core metrics (impressions, clicks, spend, CTR, CPC, CPM, reach, frequency) at the campaign level with a computed summary. Simpler alternative to get_insights for quick campaign health checks.",
     GetInsightsSchema.shape,
     async (params) => {
       try {
@@ -410,6 +414,7 @@ export function registerAnalyticsTools(
   // Get Attribution Data Tool
   server.tool(
     "get_attribution_data",
+    "Get Meta Ads attribution data showing which actions (conversions, purchases, sign-ups, leads) are attributed to ads across different attribution windows. Useful for understanding conversion paths and the lag between ad exposure and action.",
     GetInsightsSchema.shape,
     async (params) => {
       try {
