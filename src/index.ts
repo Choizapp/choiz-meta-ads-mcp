@@ -87,8 +87,20 @@ async function main() {
     console.error("   ✅ Audience tools registered");
     registerCreativeTools(server, metaClient);
     console.error("   ✅ Creative tools registered");
-    registerOAuthTools(server, auth);
-    console.error("   ✅ OAuth tools registered");
+
+    // OAuth tools are only useful when the server is responsible for
+    // generating/refreshing tokens. When a long-lived META_ACCESS_TOKEN is
+    // provisioned externally, they're dead weight that dilutes tool-search
+    // ranking on the client side. Gate registration behind the same env var
+    // that enables auto-refresh.
+    if (process.env.META_AUTO_REFRESH === "true") {
+      registerOAuthTools(server, auth);
+      console.error("   ✅ OAuth tools registered");
+    } else {
+      console.error(
+        "   ⏭️  OAuth tools skipped (META_AUTO_REFRESH != 'true')",
+      );
+    }
 
     // Register all resources
     console.error("📚 Registering resources...");
@@ -100,7 +112,11 @@ async function main() {
     console.error("   ✅ Audience resources registered");
 
     // Add account discovery tool
-    server.tool("get_ad_accounts", {}, async () => {
+    server.tool(
+      "get_ad_accounts",
+      "List all Meta (Facebook/Instagram) ad accounts the configured access token can see. Returns each account's id, name, status, currency, timezone, balance, and parent business. Call this first to discover the account_id values required by most other tools (campaigns, insights, audiences, creatives).",
+      {},
+      async () => {
       try {
         const accounts = await metaClient.getAdAccounts();
 
